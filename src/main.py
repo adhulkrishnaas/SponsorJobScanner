@@ -1,28 +1,71 @@
-from sponsor_loader import load_sponsors
+from sponsor_loader import load_sponsors, build_lookup
+from job_search import search_jobs
+from matcher import match_jobs
 
-print("=" * 50)
-print("SponsorJobScanner")
-print("=" * 50)
 
-print()
+def main():
+    print("=" * 60)
+    print("SponsorJobScanner v1.0")
+    print("=" * 60)
 
-print("Loading sponsor list...")
+    # --------------------------------------------------
+    # Load Sponsor Companies
+    # --------------------------------------------------
+    print("\nLoading sponsor companies...")
 
-sponsors = load_sponsors()
-from utils import clean_company_name
+    sponsors = load_sponsors()
+    lookup = build_lookup(sponsors)
 
-print()
+    print(f"Loaded {len(sponsors):,} sponsor companies")
+    print(f"Unique cleaned names: {len(lookup):,}")
 
-for company in sponsors["Organisation Name"].head(10):
+    # --------------------------------------------------
+    # Search Live Jobs
+    # --------------------------------------------------
+    print("\nSearching live jobs...")
 
-    print(company)
+    jobs = search_jobs()
 
-    print(" ↓ ")
+    print(f"\nTotal jobs found: {len(jobs):,}")
 
-    print(clean_company_name(company))
+    if jobs.empty:
+        print("\nNo jobs found.")
+        return
 
-    print()
+    # --------------------------------------------------
+    # Match Sponsor Companies
+    # --------------------------------------------------
+    print("\nMatching sponsor companies...")
 
-print()
+    matched_jobs = match_jobs(
+    jobs,
+    lookup
+)
 
-print(sponsors.head())
+    print(f"\nSponsor jobs found: {len(matched_jobs):,}")
+
+    if matched_jobs.empty:
+        print("\nNo sponsor jobs matched.")
+        return
+
+    # --------------------------------------------------
+    # Display Results
+    # --------------------------------------------------
+    print("\nFirst 20 matched jobs:\n")
+
+    print(
+        matched_jobs[
+            [
+                "company",
+                "matched_company",
+                "title",
+                "location",
+                "match_score",
+                "match_type",
+            ]
+        ].head(20)
+    )
+
+
+if __name__ == "__main__":
+    main()

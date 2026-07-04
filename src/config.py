@@ -1,12 +1,22 @@
-# Search settings
-
-SEARCH_TERM = "Software Engineer"
+SEARCH_TERMS = [
+    "Graduate Software Engineer",
+    "Software Engineer",
+    "Junior Software Engineer",
+    "Software Developer",
+    "Backend Developer",
+    "Frontend Developer",
+    "Full Stack Developer",
+    "Python Developer",
+    "Java Developer",
+    "DevOps Engineer",
+    "Cloud Engineer",
+    "Data Engineer",
+    "Machine Learning Engineer"
+]
 
 LOCATION = "United Kingdom"
 
-RESULTS_WANTED = 10
-
-HOURS_OLD = 168
+RESULTS_PER_SEARCH = 50
 
 JOB_SITES = [
     "indeed"
